@@ -1,0 +1,21 @@
+{
+  "name": "yrizos/theansr",
+  "description": "theansr.com API client",
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Yannis Rizos",
+      "email": "yrizos@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "guzzlehttp/guzzle": "^6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Ansr\\": "src/"
+    }
+  }
+}
