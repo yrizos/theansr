@@ -21,7 +21,9 @@ class Filter
         $value = self::string($value);
 
         if (strpos($value, '+') === 0) {
-            $value = '00' . substr($value, 1);
+            $value = substr($value, 1);
+        } else if (strpos($value, '00') === 0) {
+            $value = substr($value, 2);
         }
 
         return $value;

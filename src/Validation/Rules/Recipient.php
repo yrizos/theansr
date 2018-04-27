@@ -10,7 +10,8 @@ class Recipient extends AbstractRule
     {
         return
             is_numeric($input)
-            && strpos($input, '00') === 0
+            && strpos($input, '00') !== 0
+            && strpos($input, '+') !== 0
             && strlen($input) >= 10;
     }
 }

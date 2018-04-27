@@ -9,7 +9,7 @@ use Respect\Validation\Validator;
 class Client
 {
     const NAME = 'yrizos/theansr';
-    const VERSION = '0.1';
+    const VERSION = '0.1.1';
     const BASE_URL = 'https://api.theansr.com';
 
     private $api_version = 'v1';
@@ -111,7 +111,7 @@ class Client
         ));
     }
 
-    public function getAccountBalance(): ResponseOld
+    public function getAccountBalance(): Response
     {
         return $this->execute(new Request(
             'GET',
@@ -136,13 +136,16 @@ class Client
             $options['form_params'] = $request->getData();
         }
 
+        var_dump($request);
+
+
         $response = $client->request(
             $request->getMethod(),
             $this->getRequestUrl($request),
             $options
         );
 
-        return new Response($response->getBody());
+        return new Response($response);
     }
 
     public function getRequestUrl(Request $request): string
