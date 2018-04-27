@@ -5,20 +5,26 @@ class SmsTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateSms()
     {
+        $expected = [
+            "balance" => 3.14
+        ];
+
         $client = $this->getMockBuilder(\Ansr\Client::class)
                        ->setConstructorArgs(['', ''])
                        ->getMock();
 
-        $client->method('createSms')->willReturn(new \Ansr\Response('{"balance":5.1}'));
+        $client->method('createSms')->willReturn(new \Ansr\Response($expected));
 
         $response = $client->createSms(
             'etable',
-            '00306942464788',
+            '00306912345678',
             'test'
         );
 
-        $this->assertEquals($response->errorCode, 0);
-        $this->assertEquals($response->balance, 5.1);
+        $this->assertInstanceOf(\Ansr\Response::class, $response);
+
+        $this->assertEquals(0, $response->errorCode);
+        $this->assertEquals($expected['balance'], $response->balance);
     }
 
     /**

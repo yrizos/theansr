@@ -2,35 +2,37 @@
 
 namespace Ansr;
 
+use Psr\Http\Message\ResponseInterface;
+
 class Response extends \ArrayObject
 {
-    public function __construct($data)
+    public function __construct($response)
     {
-        $this->setData($data);
+        $this->setResponse($response);
     }
 
-    public function setData($data): Response
+    public function setResponse($response): Response
     {
-        if (is_string($data)) {
-            $data = json_decode($data, true);
+        if ($response instanceof ResponseInterface) {
+            $response = strval($response->getBody());
         }
 
-        if (!is_array($data)) {
-            throw new \InvalidArgumentException('Data must be an array');
+        if (is_string($response)) {
+            $response = @json_decode($response, true);
         }
 
-        $data = array_merge(
+        if (!is_array($response) || empty($response)) {
+            throw new \InvalidArgumentException('Invalid response.');
+        }
+
+        $response = array_merge(
             [
                 'errorCode' => 0,
             ],
-            $data
+            $response
         );
 
-        foreach ($data as $key => $value) {
-            if (is_numeric($key)) {
-                continue;
-            }
-
+        foreach ($response as $key => $value) {
             $this->$key = $value;
         }
 
