@@ -2,11 +2,66 @@
 
 class SmsTest extends \PHPUnit\Framework\TestCase
 {
+    public function testCreateSmsVerificationPin()
+    {
+        $expected = [
+            'call_id'          => 'GXSxFMLK7SjjQkjZxB0TomXhneMRzt0',
+            'price'            => 0.061938,
+            'verification_pin' => 9073,
+        ];
+
+        $client = $this->getMockBuilder(\Ansr\Client::class)
+                       ->setConstructorArgs(['', ''])
+                       ->getMock();
+
+        $client->method('createPinVerificationSms')->willReturn(new \Ansr\Response($expected));
+
+        $response = $client->createPinVerificationSms(
+            'etable',
+            '00306912345678',
+            4
+        );
+
+        $this->assertInstanceOf(\Ansr\Response::class, $response);
+
+        $this->assertEquals(0, $response->errorCode);
+        $this->assertEquals($expected['call_id'], $response->call_id);
+        $this->assertEquals($expected['price'], $response->price);
+        $this->assertEquals($expected['verification_pin'], $response->verification_pin);
+    }
+
+    public function testGetSmsVerificationPin()
+    {
+        $expected = [
+            'call_id'          => 'GXSxFMLK7SjjQkjZxB0TomXhneMRzt0',
+            'price'            => 0.061938,
+            'verification_pin' => 9073,
+        ];
+
+        $client = $this->getMockBuilder(\Ansr\Client::class)
+                       ->setConstructorArgs(['', ''])
+                       ->getMock();
+
+        $client->method('createPinVerificationSms')->willReturn(new \Ansr\Response($expected));
+
+        $response = $client->createPinVerificationSms(
+            'GXSxFMLK7SjjQkjZxB0TomXhneMRzt0'
+        );
+
+        $this->assertInstanceOf(\Ansr\Response::class, $response);
+
+        $this->assertEquals(0, $response->errorCode);
+        $this->assertEquals($expected['call_id'], $response->call_id);
+        $this->assertEquals($expected['price'], $response->price);
+        $this->assertEquals($expected['verification_pin'], $response->verification_pin);
+    }
+
+
 
     public function testCreateSms()
     {
         $expected = [
-            "balance" => 3.14
+            "balance" => 3.14,
         ];
 
         $client = $this->getMockBuilder(\Ansr\Client::class)

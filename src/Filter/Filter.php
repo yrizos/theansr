@@ -4,6 +4,11 @@ namespace Ansr\Filter;
 
 class Filter
 {
+    public static function url_segment($value)
+    {
+        return urlencode(self::string($value));
+    }
+
     public static function string($value)
     {
         return trim(strval($value));

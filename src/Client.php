@@ -100,14 +100,59 @@ class Client
         int $num_of_digits = 4
     )
     {
+        $sender     = Filter::string($sender);
+        $recipients = Filter::recipients($recipients);
+
+        Validator::with('Ansr\\Validation\\Rules\\');
+
+        if (!Validator::sender()->validate($sender)) {
+            throw new \InvalidArgumentException('Sender is invalid.');
+        }
+
+        if (!Validator::recipients()->validate($recipients)) {
+            throw new \InvalidArgumentException('Recipients are invalid.');
+        }
+
         return $this->execute(new Request(
             'POST',
             '/sms/verification_pin',
             [
-                'sender'         => $sender,
-                'recipients'     => $recipients,
-                'num_of_digits ' => $num_of_digits,
+                'sender'        => $sender,
+                'recipients'    => $recipients,
+                'num_of_digits' => $num_of_digits,
             ]
+        ));
+    }
+
+    /**
+     * @todo TEST
+     *
+     * @param string $call_id
+     * @return Response
+     */
+    public function verifyPinVerificationSms(
+        string $call_id
+    )
+    {
+        return $this->execute(new Request(
+            'POST',
+            '/sms/verification_pin/' . Filter::url_segment($call_id)
+        ));
+    }
+
+    /**
+     * @todo TEST
+     *
+     * @param string $call_id
+     * @return Response
+     */
+    public function getSmsVerificationPin(
+        string $call_id
+    )
+    {
+        return $this->execute(new Request(
+            'GET',
+            '/sms/verification_pin/' . Filter::url_segment($call_id)
         ));
     }
 
@@ -135,9 +180,6 @@ class Client
         if ($request->getMethod() == 'POST') {
             $options['form_params'] = $request->getData();
         }
-
-        var_dump($request);
-
 
         $response = $client->request(
             $request->getMethod(),
